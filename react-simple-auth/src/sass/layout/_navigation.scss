@@ -1,0 +1,68 @@
+.nav {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 7.5rem;
+    justify-content: space-between;  
+    align-items: stretch;
+    font-family: 'Spartan', sans-serif;
+    padding: 2rem 20rem;
+
+    &--logo {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: white;
+        user-select: none;
+        letter-spacing: 0.3rem;
+    }
+
+    &--nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;  
+        align-items: stretch;
+        text-transform: uppercase;
+        align-self: center; 
+
+        &--item {
+            color: white;
+            text-decoration: none;
+            font-size: 1.3rem;
+            user-select: none;
+            position: relative;
+
+            &:visited {
+                color: white;
+                text-decoration: none;
+            }
+
+            &:hover, &-active { 
+                &::before {
+                    width: 100% !important;  
+                    background-color: #00c9b7 !important;
+                }
+            }
+ 
+            &::before {
+                content: "";
+                position: absolute;
+                bottom: -75%;
+                left: 50%; 
+                transform: translate(-50%, 0);
+                width: 0%;
+                height: 0.3rem; 
+                background-color: #2c2b30;
+                transition: 0.3s all;
+                border-radius: 10%;
+            }
+
+            &:not(:last-child)
+            {
+                margin-right: 2.5rem; 
+            }
+        }
+    }
+}
