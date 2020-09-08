@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Route, Switch, NavLink } from 'react-router-dom';
+import { Route, Switch, NavLink, Redirect } from 'react-router-dom';
 import Auth from './Auth';
-import Test from './Test';
-
+import Home from './Home';
 
 export default class App extends Component {
 
@@ -16,7 +15,6 @@ export default class App extends Component {
   };
 
   handleAuthChanged = (data, isAuthenticated) => {
-    console.log("handleAuthChanged")
     console.log(data)
   };
 
@@ -25,7 +23,7 @@ export default class App extends Component {
       <React.Fragment>
         <div className="nav">
           <div className="nav--logo">
-            Oxi.Labs  
+            Auth.Simple  
           </div>
           <div className="nav--nav">
             <NavLink activeClassName="nav--nav--item-active" className="nav--nav--item" to="/signin">
@@ -37,9 +35,10 @@ export default class App extends Component {
           </div>
         </div>
         <Switch>
+          <Route exact path="/" render={props => <Home {...props} />} />
           <Route exact path="/signin" render={props => <Auth {...props} onAuthChanged={this.handleAuthChanged} />} />
-          <Route exact path="/test" component={Test} />
           <Route exact path="/signup" render={props => <Auth {...props} onAuthChanged={this.handleAuthChanged} />} />
+          <Route path="*" render={props => <Redirect to="/signin" />} />
         </Switch>
       </React.Fragment>
     );
