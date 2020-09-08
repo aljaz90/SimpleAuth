@@ -1,2 +1,6 @@
 /build
 /node_modules
+/node-simple-auth/node_modules
+/react-simple-auth/node_modules
+/node-simple-auth/build
+/react-simple-auth/build

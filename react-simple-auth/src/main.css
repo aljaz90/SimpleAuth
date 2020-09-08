@@ -391,3 +391,8 @@ body {
   100% {
     opacity: 0;
     transform: translateX(-20%); } }
+
+.home {
+  background-image: linear-gradient(to left bottom, #2c2b30, #232a34, #132b33, #022b2c, #052a1d);
+  min-width: 100vw;
+  min-height: 100vh; }
