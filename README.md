@@ -1,1 +1,1 @@
-# Simple-Auth-Template
+# Simple authentication template for React 
