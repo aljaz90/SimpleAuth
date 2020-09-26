@@ -4,6 +4,9 @@ import { BrowserRouter } from 'react-router-dom';
 import './main.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import axios from 'axios';
+
+axios.defaults.withCredentials = true
 
 ReactDOM.render(
   <React.StrictMode>

@@ -110,7 +110,6 @@ export default class Auth extends Component {
         const config = {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': localStorage.getItem('token')
             }
         };
     

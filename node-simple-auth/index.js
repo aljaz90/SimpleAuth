@@ -6,19 +6,18 @@ let express         = require("express"),
     cors            = require("cors"),
     passport        = require("passport"),
     LocalStrategy   = require("passport-local").Strategy,
-    JWTStrategy     = require('passport-jwt').Strategy,
     GoogleStrategy  = require('passport-google-oauth20').Strategy,
     path            = require('path'),
-    session         = require('express-session'),
-    cookieParser    = require('cookie-parser');
+    cookieSession   = require("cookie-session"),
+    keys            = require("./config/keys"),
+    config          = require("./config");
 
-app.use(session({
-    secret: "isthisasecretpassphrase",
-    resave: false,
-    saveUninitialized: false
-}));
+app.use(cookieSession({
+    maxAge: 1000 * 60 * 60 * 24,
+    keys: [...keys.cookieKeys] 
+}))
 
-passport.use(new GoogleStrategy({
+/*passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL: "http://www.example.com/auth/google/callback"
@@ -28,7 +27,7 @@ passport.use(new GoogleStrategy({
       return cb(err, user);
     });
   }
-));
+));*/
 
 let corsOptions = {
     credentials: true,
@@ -44,7 +43,6 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json('application/json'));
-app.use(cookieParser());
 
 app.use(passport.initialize());
 
@@ -54,24 +52,10 @@ passport.use(new LocalStrategy(
             passwordField: 'password'
         },
         User.authenticate()
-    ));
+));
 
 passport.serializeUser(db.User.serializeUser());
 passport.deserializeUser(db.User.deserializeUser());
-
-passport.use(new JWTStrategy({
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey   : 'thisisasecret...'}, (jwtPayload, cb) => {
-
-        return User.findById(jwtPayload.id)
-            .then(user => {
-                return cb(null, user);
-            })
-            .catch(err => {
-                return cb(err);
-            });
-    }
-));
 
 app.use("/api/users", userRoutes);
 app.use(express.static(path.join(__dirname, 'build')));

@@ -3,22 +3,12 @@ let express     = require("express"),
     passport    = require("passport"),
     db          = require("../models"),
     middleware  = require("../middleware"),
-    ExtractJwt  = require('passport-jwt').ExtractJwt,
-    jwt         = require('jsonwebtoken');
+    helpers     = require("../helpers");
     
 Date.prototype.addHours = function(hours) {
     this.setHours(this.getHours() + hours);
     return this;
 }
-
-let cookieExtractor = req => {
-    var token = null;
-    if (req && req.cookies)
-    {
-        token = req.cookies['jwt'];
-    }
-    return token;
-};
 
 router.get("/", middleware.isLoggedIn, (req, res) => {
     db.User.findById(req.user.id).populate("portfolios").exec((err, user) => {
@@ -30,25 +20,39 @@ router.get("/", middleware.isLoggedIn, (req, res) => {
 })
 
 router.post("/new", (req, res) => {
-    let newUser = new db.User({email: req.body.email, first_name: req.body.first_name, last_name: req.body.last_name});
+    let newUser = new db.User({email: req.body.email, username: req.body.first_name+" "+req.body.last_name});
     db.User.register(newUser, req.body.password, (err, user) => {
         if(err) {
             console.log(err);
             return res.json(err);
         } 
-        else {
-            passport.authenticate('local', {session: false}) (req, res, () => {
-                const token = jwt.sign({ userId: user.id }, 'thisisasecret...');
-                const tokenExpiration = new Date().addHours(24);
-                res.json({user, token, tokenExpiration});
-            });
-        }
+
+        passport.authenticate('local', {session: false}) (req, res, () => {
+            let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            let session = new db.Session({ip: ip, user: req.user._id, key: helpers.generateID(48)});
+            session.save(err => {
+                if (err) {
+                    return res.status(400).json(err);
+                }
+
+                req.session.key = session.key;
+                req.session.session = session._id;
+                req.session.expiration = session.expire_at;
+
+                res.json(user._doc);
+            }); 
+        });
     });
 });
 
 router.get('/logout', (req, res) => {
     req.session.destroy(err => {
         res.clearCookie('connect.sid');
+
+        req.session.expiration = null;
+        req.session.session = null;
+        req.session.key = null;
+
         if (err) {
             return res.send(err);
         }
@@ -57,14 +61,24 @@ router.get('/logout', (req, res) => {
 });
 
 router.post("/", passport.authenticate('local', { session: false }), (req, res) => {
-    db.User.findById(req.user.id).populate("portfolios").exec((err, user) => {
+    let ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    let session = new db.Session({ip: ip, user: req.user._id, key: helpers.generateID(48)});
+    session.save(err => {
         if (err) {
             return res.status(400).json(err);
         }
-        const token = jwt.sign({ userId: user.id }, 'thisisasecret...');
-        const tokenExpiration = new Date().addHours(24);
-        res.json({user, token, tokenExpiration});
+
+        req.session.key = session.key;
+        req.session.session = session._id;
+        req.session.expiration = session.expire_at;
+
+        res.json(user._doc);
     });
+});
+
+
+router.post("/", passport.authenticate('local', { session: false }), (req, res) => {
+    
 });
 
 module.exports = router;
