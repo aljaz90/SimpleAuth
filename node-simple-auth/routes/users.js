@@ -45,7 +45,15 @@ router.post("/new", (req, res) => {
     });
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', async (req, res) => {
+    try {
+        await db.Session.findByIdAndDelete(req.session.session);
+    }
+    catch (err) {
+        console.log("[ERROR] Error deleting session:");
+        console.log(err);
+    }
+    
     req.session = null;
     res.end();
 });
