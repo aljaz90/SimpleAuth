@@ -1,50 +1,43 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import querystring from 'querystring';
+import { Redirect } from 'react-router';
 
 const signinForm = {
-    "header": "Sign In",
-    "subheader": "Sign in with your email or phone.",
-    "submitButtom": {name: "Sign in", continue: "Continue"},
+    "title": "Sign In",
+    "subtitle": "Sign in with your email or phone.",
+    "submitButton": {submit: "Sign in", continue: "Continue"},
     "inputGroups": [
         {
             "inputs": [
-                {name: "email", type: "email", required: true},
-                {name: "password", type: "password", required: true, minLength: "6"},
+                {key: "email", text: "Email", type: "email", required: true},
+                {key: "password", text: "Password", type: "password", required: true, minLength: "6"},
             ]
         }
     ],
-    "inputs": [
-        {name: "email", type: "email", required: true},
-        {name: "password", type: "password", required: true, minLength: "6"},
-    ]
-}
+};
+signinForm.inputs = [].concat(...signinForm.inputGroups.map(ig => ig.inputs));
 
 const signupForm = {
-    "header": "Sign Up",
-    "subheader": "Sign up with your email or phone.",
-    "submitButtom": {name: "Sign up", continue: "Continue"},
+    "title": "Sign Up",
+    "subtitle": "Sign up with your email or phone.",
+    "submitButton": {submit: "Sign up", continue: "Continue"},
     "inputGroups": [
         {
             "inputs": [
-                {name: "username", minLength: "5", type: "text", required: true},
-                {name: "email", type: "email", required: true},
+                {key: "username", text: "Username", minLength: "2", type: "text", required: true},
+                {key: "email", text: "Email", type: "email", required: true},
             ]
         },
         {
             "inputs": [
-                {name: "password", type: "password", required: true, minLength: "6"},
-                {name: "password_confirmation", type: "password", required: true, minLength: "6"},
+                {key: "password", text: "Password", type: "password", required: true, minLength: "6"},
+                {key: "password_confirmation", text: "Password confirmation", type: "password", required: true, minLength: "6"},
             ]
         }
-    ],
-    "inputs": [
-        {name: "username", minLength: "5", type: "text", required: true},
-        {name: "email", type: "email", required: true},
-        {name: "password", type: "password", required: true, minLength: "6"},
-        {name: "password_confirmation", type: "password", required: true, minLength: "6"},
     ]
-}
+};
+signupForm.inputs = [].concat(...signupForm.inputGroups.map(ig => ig.inputs));
 
 
 export default class Auth extends Component {
@@ -53,10 +46,12 @@ export default class Auth extends Component {
 
         let signingIn = this.props.location.pathname === "/signin";
         let inputData = {};
+        let redirectDestination = new URLSearchParams(props.location.search).get("redirectTo");
+
         if (signingIn)
-            signinForm.inputs.forEach(el => {inputData[el.name] = ""; inputData[el.name+"_error"] = ""; });
+            signinForm.inputs.forEach(el => {inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
         else
-            signupForm.inputs.forEach(el => {inputData[el.name] = ""; inputData[el.name+"_error"] = ""; });
+            signupForm.inputs.forEach(el => {inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
 
         this.state = {
             animations: {
@@ -71,22 +66,25 @@ export default class Auth extends Component {
             inputData: inputData,
             destination: "", 
             currentInputGroup: 0, 
-            signingIn: signingIn
+            signingIn: signingIn,
+            redirectDestination: redirectDestination ? redirectDestination : ""
         };
 
-        if (localStorage.getItem('token') !== null) {
+        /*if (localStorage.getItem('token') !== null) {
             this.getUser();
-        }
+        }*/
     }
     
     componentDidUpdate(prevProps) {
         if (prevProps.location.pathname !== this.props.location.pathname) {
             let signingIn = this.props.location.pathname === "/signin";
             let inputData = {};
+            let redirectDestination = new URLSearchParams(this.props.location.search).get("redirectTo");
+
             if (signingIn)
-                signinForm.inputs.forEach(el => {inputData[el.name] = ""; inputData[el.name+"_error"] = ""; });
+                signinForm.inputs.forEach(el => {inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
             else
-                signupForm.inputs.forEach(el => {inputData[el.name] = ""; inputData[el.name+"_error"] = ""; });
+                signupForm.inputs.forEach(el => {inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
 
             this.setState({
                 animations: {
@@ -101,7 +99,8 @@ export default class Auth extends Component {
                 inputData: inputData,
                 destination: "", 
                 currentInputGroup: 0, 
-                signingIn: signingIn
+                signingIn: signingIn,
+                redirectDestination: redirectDestination ? redirectDestination : "dashboard"
             });
         }
     };
@@ -116,15 +115,15 @@ export default class Auth extends Component {
         axios.get("http://localhost:4000/api/users", config)
         .then(res => {
             if (res.status === 200) {
-                this.props.onAuthChanged(res.data, true);
+                this.props.saveUserData(true, res.data);
             } 
             else {
-                this.props.onAuthChanged({}, false);
+                this.props.saveUserData(false);
             }
         })
         .catch(err => {
             console.log(err);
-            this.props.onAuthChanged({}, false);
+            this.props.saveUserData(false);
         });
     };
     
@@ -132,29 +131,29 @@ export default class Auth extends Component {
         return (
             <React.Fragment>
                 <div className="auth--container--main--header">
-                    {inputData.header}
+                    {inputData.title}
                 </div>
                 <div style={ inputData.inputs.length > 2 ? {marginBottom: "2rem"} : {}} className="auth--container--main--subheader">
-                    {inputData.subheader}
+                    {inputData.subtitle}
                 </div>
                 <form onSubmit={(e) => this.handleSubmit(e, this.state.currentInputGroup === inputData.inputGroups.length - 1)}>
                     <div onAnimationEnd={this.handleInputAnimationFinish} className={`auth--container--main--list ${this.state.animations.inputGroup}`}>
                          { 
                             inputData.inputGroups[this.state.currentInputGroup].inputs.map(el => (
-                                <div key={el.name} className="auth--container--main--list--item">
-                                    <label htmlFor={el.name} className="auth--container--main--list--item--label">{el.name}</label>
-                                    <input {...el} onChange={this.handleInputChange} value={this.state.inputData[el.name]} className="auth--container--main--list--item--input" />
+                                <div key={el.key} className="auth--container--main--list--item">
+                                    <label htmlFor={el.key} className="auth--container--main--list--item--label">{el.text}</label>
+                                    <input {...el} key={null} name={el.key} onChange={this.handleInputChange} value={this.state.inputData[el.key]} className="auth--container--main--list--item--input" />
                                     <div className="auth--container--main--list--item--label-error--container">
-                                        <span style={this.state.inputData[el.name+"_error"] === "" ? {display: "none" } : {display: "inline-block" }} className="auth--container--main--list--item--label-error--icon"></span>
+                                        <span style={this.state.inputData[el.key+"_error"] === "" ? {display: "none" } : {display: "inline-block" }} className="auth--container--main--list--item--label-error--icon"></span>
                                         <label className="auth--container--main--list--item--label auth--container--main--list--item--label-error">
-                                            {this.state.inputData[el.name+"_error"]}
+                                            {this.state.inputData[el.key+"_error"]}
                                         </label>
                                     </div>
                                 </div>
                             ))
                         }                        
                     </div>
-                    <input className="auth--container--main--submit" type="submit" value={this.state.currentInputGroup === inputData.inputGroups.length - 1 ? inputData.submitButtom.name : inputData.submitButtom.continue } />
+                    <input className="auth--container--main--submit" type="submit" value={this.state.currentInputGroup === inputData.inputGroups.length - 1 ? inputData.submitButtom.submit : inputData.submitButtom.continue } />
                 </form>
             </React.Fragment>
         );
@@ -172,6 +171,10 @@ export default class Auth extends Component {
 
     handleSubmit = (e, lastInputGroup) => {
         e.preventDefault();
+        if (this.state.loading) {
+            return;
+        }
+
         if (lastInputGroup) {
             if (this.state.signingIn) {
                 this.signIn(this.state.inputData);
@@ -202,20 +205,18 @@ export default class Auth extends Component {
         axios.post("http://localhost:4000/api/users", querystring.stringify(requestBody), config)
         .then(res => {
             if (res.status === 200) {
-                localStorage.setItem("token", res.data.token);
-                localStorage.setItem("tokenExpiration", res.data.tokenExpiration);
                 this.setState({...this.state, inputData: {}, loading: false, animations: {...this.state.animations, loader: "auth--loader--animated-hide"}});
-                this.props.onAuthChanged(res.data.user, true);
+                this.props.saveUserData(true, res.data.user);
             } 
             else {
                 this.setState({...this.state, loading: false, animations: {...this.state.animations, loader: "auth--loader--animated-hide"}, inputData: {...this.state.inputData, password: "", email_error: "", password_error: "Incorrect email or password."}});
-                this.props.onAuthChanged({}, false);
+                this.props.saveUserData(false);
             }
         })
         .catch(err => {
             console.log(err);
             this.setState({...this.state, loading: false, animations: {...this.state.animations, loader: "auth--loader--animated-hide"}, inputData: {...this.state.inputData, password: "", email_error: "", password_error: "Incorrect email or password."}});
-            this.props.onAuthChanged({}, false);
+            this.props.saveUserData(false);
         });
     };
 
@@ -234,20 +235,18 @@ export default class Auth extends Component {
         axios.post("http://localhost:4000/api/users/new", querystring.stringify(requestBody), config)
         .then(res => {
             if (res.status === 200) {
-                localStorage.setItem("token", res.data.token);
-                localStorage.setItem("tokenExpiration", res.data.tokenExpiration);
                 this.setState({...this.state, inputData: {}, loading: false, animations: {...this.state.animations, loader: "auth--loader--animated-hide"}});
-                this.props.onAuthChanged(res.data.user, true);
+                this.props.saveUserData(true, res.data.user);
             } 
             else {
                 this.setState({...this.state, loading: false, animations: {...this.state.animations, loader: "auth--loader--animated-hide"}, inputData: {...this.state.inputData, password: "", password_confirmation: "", password_error: "", password_confirmation_error: "Server Error."}});
-                this.props.onAuthChanged({}, false);
+                this.props.saveUserData(false);
             }
         })
         .catch(err => {
             console.log(err);
             this.setState({...this.state, loading: false, animations: {...this.state.animations, loader: "auth--loader--animated-hide"}, inputData: {...this.state.inputData, password: "", password_confirmation: "", password_error: "", password_confirmation_error: "Server Error."}});
-            this.props.onAuthChanged({}, false);
+            this.props.saveUserData(false);
         });
     }
 
@@ -277,6 +276,9 @@ export default class Auth extends Component {
     };
 
     render() {
+        if (this.props.isAuthenticated) {
+            return <Redirect to={`/${this.state.redirectDestination}`} />
+        }
         return (
             <div className="auth">
                 <div onAnimationEnd={this.handleAnimationFinish} className={`auth--container ${this.state.animations.main}`}>

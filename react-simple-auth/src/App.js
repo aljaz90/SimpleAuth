@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, NavLink, Redirect } from 'react-router-dom';
-import Auth from './Auth';
+import Auth from './containers/Auth';
 import Home from './Home';
 
 export default class App extends Component {
@@ -10,12 +10,12 @@ export default class App extends Component {
 
     this.state = {
       isAuthenticated: false,
-      user: {}
+      user: null
     }
   };
 
-  handleAuthChanged = (data, isAuthenticated) => {
-    console.log(data)
+  setUserData = (isAuthenticated, data=null) => {
+    this.setState({...this.state, isAuthenticated: isAuthenticated, user: data});
   };
 
   render() {
@@ -36,8 +36,8 @@ export default class App extends Component {
         </div>
         <Switch>
           <Route exact path="/" render={props => <Home {...props} />} />
-          <Route exact path="/signin" render={props => <Auth {...props} onAuthChanged={this.handleAuthChanged} />} />
-          <Route exact path="/signup" render={props => <Auth {...props} onAuthChanged={this.handleAuthChanged} />} />
+          <Route exact path="/signin" render={props => <Auth {...props} isAuthenticated={this.state.isAuthenticated} saveUserData={this.setUserData} />} />
+          <Route exact path="/signup" render={props => <Auth {...props} isAuthenticated={this.state.isAuthenticated} saveUserData={this.setUserData} />} />
           <Route path="*" render={props => <Redirect to="/signin" />} />
         </Switch>
       </React.Fragment>
