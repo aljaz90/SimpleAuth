@@ -46,18 +46,8 @@ router.post("/new", (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        res.clearCookie('connect.sid');
-
-        req.session.expiration = null;
-        req.session.session = null;
-        req.session.key = null;
-
-        if (err) {
-            return res.send(err);
-        }
-        res.send("LOGGED OUT"); 
-    });
+    req.session = null;
+    res.end();
 });
 
 router.post("/", passport.authenticate('local', { session: false }), (req, res) => {

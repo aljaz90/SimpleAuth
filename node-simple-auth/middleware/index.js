@@ -36,17 +36,13 @@ middlewareObj.isLoggedIn = async (req, res, next) => {
             }
         }
         catch (err) {
-            console.log("ERR")
+            console.log("Error:")
             console.log(err);
             return res.status(401).json("Unauthorized");
         }
     } 
     else {
-        req.session.expiratikeyon = null;
-        req.session.session = null;
-        req.session.expiration = null;
-        console.log("Damaged session")
-
+        req.session = null;
         res.status(401).json("Unauthorized");
     }
 };
