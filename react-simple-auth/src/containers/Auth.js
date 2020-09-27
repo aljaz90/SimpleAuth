@@ -16,7 +16,6 @@ const signinForm = {
         }
     ],
 };
-signinForm.inputs = [].concat(...signinForm.inputGroups.map(ig => ig.inputs));
 
 const signupForm = {
     "title": "Sign Up",
@@ -37,8 +36,6 @@ const signupForm = {
         }
     ]
 };
-signupForm.inputs = [].concat(...signupForm.inputGroups.map(ig => ig.inputs));
-
 
 export default class Auth extends Component {
     constructor(props) {
@@ -48,10 +45,12 @@ export default class Auth extends Component {
         let inputData = {};
         let redirectDestination = new URLSearchParams(props.location.search).get("redirectTo");
 
-        if (signingIn)
-            signinForm.inputs.forEach(el => {inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
-        else
-            signupForm.inputs.forEach(el => {inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
+        if (signingIn) {
+            [].concat(...signinForm.inputGroups.map(ig => ig.inputs)).forEach(el => { inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
+        }
+        else {
+            [].concat(...signupForm.inputGroups.map(ig => ig.inputs)).forEach(el => { inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
+        }
 
         this.state = {
             animations: {
@@ -81,11 +80,12 @@ export default class Auth extends Component {
             let inputData = {};
             let redirectDestination = new URLSearchParams(this.props.location.search).get("redirectTo");
 
-            if (signingIn)
-                signinForm.inputs.forEach(el => {inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
-            else
-                signupForm.inputs.forEach(el => {inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
-
+            if (signingIn) {
+                [].concat(...signinForm.inputGroups.map(ig => ig.inputs)).forEach(el => { inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
+            }
+            else {
+                [].concat(...signupForm.inputGroups.map(ig => ig.inputs)).forEach(el => { inputData[el.key] = ""; inputData[el.key+"_error"] = ""; });
+            }
             this.setState({
                 animations: {
                     inputGroup: "",
@@ -128,12 +128,14 @@ export default class Auth extends Component {
     };
     
     generateForm = inputData => {
+        let inputs = [].concat(...inputData.inputGroups.map(ig => ig.inputs));
+
         return (
             <React.Fragment>
                 <div className="auth--container--main--header">
                     {inputData.title}
                 </div>
-                <div style={ inputData.inputs.length > 2 ? {marginBottom: "2rem"} : {}} className="auth--container--main--subheader">
+                <div style={ inputs.length > 2 ? {marginBottom: "2rem"} : {}} className="auth--container--main--subheader">
                     {inputData.subtitle}
                 </div>
                 <form onSubmit={(e) => this.handleSubmit(e, this.state.currentInputGroup === inputData.inputGroups.length - 1)}>
