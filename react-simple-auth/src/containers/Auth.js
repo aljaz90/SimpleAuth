@@ -153,7 +153,7 @@ export default class Auth extends Component {
                             ))
                         }                        
                     </div>
-                    <input className="auth--container--main--submit" type="submit" value={this.state.currentInputGroup === inputData.inputGroups.length - 1 ? inputData.submitButtom.submit : inputData.submitButtom.continue } />
+                    <input className="auth--container--main--submit" type="submit" value={this.state.currentInputGroup === inputData.inputGroups.length - 1 ? inputData.submitButton.submit : inputData.submitButton.continue } />
                 </form>
             </React.Fragment>
         );
