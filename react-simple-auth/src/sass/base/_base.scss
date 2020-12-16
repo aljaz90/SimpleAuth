@@ -25,3 +25,17 @@ body {
     font-weight: 300;
     background-color: $color-white-2;
 }
+ 
+.container {
+    display: grid;
+    //grid-template-rows: 7rem 30vh 30vh 20vh 20vh;
+    grid-template-rows: 7rem repeat(2, minmax(calc(0.28 * calc(100vh - 7rem)), min-content)) repeat(2, calc(0.22 * calc(100vh - 7rem)));
+    grid-template-columns: [sidebar-start] 8rem [sidebar-end full-start] minmax(6rem, 1fr) [center-start] repeat(8, [col-start] minmax(min-content, 14rem) [col-end]) [center-end] minmax(6rem, 1fr) [full-end];
+
+    @include respond(small-desktop) { 
+        grid-template-rows: 7rem repeat(4 calc(calc(100% - 7rem) / 4));
+    }
+    @include respond(phone) { 
+        grid-template-rows: 7rem repeat(4, min-content);
+    }
+}

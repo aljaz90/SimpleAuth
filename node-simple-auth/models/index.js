@@ -1,18 +1,20 @@
-let mongoose    = require("mongoose"),
-    config      = require("../config");
+const mongoose = require("mongoose"),
+      CONFIG   = require("../config/config");      
 
-try {
-    mongoose.connect( config.databaseUrl, { useNewUrlParser: true, useUnifiedTopology: true }, () =>
-        console.log("Connected established to the database")
-    );    
-}
-catch (err) { 
-    console.log("Could not connect to the database:");    
-    console.log(err);    
-}
-
+(async () => {
+    try {
+        await mongoose.connect(CONFIG.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+        console.log(`[CONNECTED] Connected to the database at: ${CONFIG.DATABASE_URL}`);
+    }
+    catch (err) { 
+        console.log(`[ERROR] Unable to connect to the database at: ${CONFIG.DATABASE_URL}`);
+        console.log(err)  
+    }
+})();
 
 mongoose.Promise = Promise;
+mongoose.set('useCreateIndex', true);
 
 module.exports.Session = require("./session");
 module.exports.User = require("./user");
+module.exports.Upload = require("./upload");

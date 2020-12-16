@@ -1,43 +1,34 @@
-let express         = require("express"),
-    app             = express(),
-    userRoutes      = require("./routes/users"),
-    db              = require("./models"),
-    bodyParser      = require("body-parser"),
-    cors            = require("cors"),
-    passport        = require("passport"),
-    LocalStrategy   = require("passport-local").Strategy,
-    GoogleStrategy  = require('passport-google-oauth20').Strategy,
-    path            = require('path'),
-    cookieSession   = require("cookie-session"),
-    keys            = require("./config/keys"),
-    config          = require("./config");
+const   // CORE EXPRESS
+        express         = require("express"),
+        app             = express(),
+        // ROUTES
+        userRoutes      = require("./routes/users"),
+        uploadRoutes    = require("./routes/uploads"),
+        // DATABASE
+        db              = require("./models"),
+        // CONFIG FILES
+        CONFIG          = require("./config/config"),
+        // EXTERNAL MODULES
+        passport        = require("passport"),
+        LocalStrategy   = require("passport-local").Strategy,
+        bodyParser      = require("body-parser"),
+        cookieSession   = require("cookie-session"),
+        cors            = require("cors"),
+        path            = require("path");
+
 
 app.use(cookieSession({
-    maxAge: 1000 * 60 * 60 * 24,
-    keys: [...keys.cookieKeys] 
+    maxAge: CONFIG.SESSION.MAX_AGE,
+    SameSite: CONFIG.SESSION.SAME_SITE,
+    keys: CONFIG.SESSION.KEYS
 }))
 
-/*passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://www.example.com/auth/google/callback"
-  },
-  (accessToken, refreshToken, profile, cb) => {
-    db.User.findOrCreate({ googleId: profile.id }, (err, user) => {
-      return cb(err, user);
-    });
-  }
-));*/
-
-let corsOptions = {
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'Set-Cookie'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    origin: [
-        'http://localhost:3000',
-        'http://localhost:4000' 
-    ]
-}
+const corsOptions = {
+    credentials: CONFIG.CORS.CREDENTIALS,
+    allowedHeaders: CONFIG.CORS.ALLOWED_HEADERS,
+    methods: CONFIG.CORS.METHODS,
+    origin: CONFIG.CORS.ORIGIN_URLS
+};
 
 app.use(cors(corsOptions));
 
@@ -47,23 +38,30 @@ app.use(bodyParser.json('application/json'));
 app.use(passport.initialize());
 
 passport.use(new LocalStrategy(
-        {
-            usernameField: 'email',
-            passwordField: 'password'
-        },
-        User.authenticate()
+    {
+        usernameField: 'email',
+        passwordField: 'password',
+        session: false
+    },
+    db.User.authenticate()
 ));
 
 passport.serializeUser(db.User.serializeUser());
 passport.deserializeUser(db.User.deserializeUser());
 
-app.use("/api/users", userRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/upload", uploadRoutes);
+
+app.get("api/*", (_, res) => {
+    res.status(404).send("Url not found: 404");
+});
+
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/*', (req, res) => {
+app.get('/*', (_, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.listen(4000, () => {
-    console.log("Running on port " + 4000);
+app.listen(CONFIG.PORT, () => {
+    console.log("[RUN] Running on port " + CONFIG.PORT);
 });

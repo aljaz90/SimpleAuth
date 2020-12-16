@@ -1,30 +1,114 @@
 .auth {
-    background-image: linear-gradient(to left bottom, #2c2b30, #232a34, #132b33, #022b2c, #052a1d);
-    width: 100vw;
-    height: 100vh;
+    background-image: linear-gradient(to right bottom, $color-primary, $color-secondary-dark);
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    z-index: 90;
+    min-height: 100vh;
+
+    @include respond(tab-port) {
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
     &--animation {
         &-enter {
-            animation: enterAnimation 0.3s 1 forwards;
+            animation: enterAnimation 0.3s 1 cubic-bezier(0.61, 1, 0.88, 1) forwards;
         }
         &-exit {
-            animation: exitAnimation 0.3s 1 forwards;
+            animation: exitAnimation 0.3s 1 cubic-bezier(0.61, 1, 0.88, 1) forwards;
+        }
+    }
+
+    &--nav {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        padding: 4rem 10rem;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        @include respond(tab-port) {
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        &--logo {
+            height: 4rem;
+            width: 20rem;
+            background-position: center;
+            background-size: cover; 
+        }
+
+        &--actions {
+            display: flex;
+            align-items: center;
+        }
+
+        &--item {
+            color: $color-white;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 600;
+            user-select: none;
+            position: relative;
+            cursor: pointer;
+
+            &:visited {
+                color: $color-white;
+                text-decoration: none;
+            }
+
+            &:hover, &-active { 
+                &::before {
+                    width: 100% !important;  
+                    background-color: $color-white;
+                }
+            }
+ 
+            &::before {
+                content: "";
+                position: absolute;
+                bottom: -50%;
+                left: 50%; 
+                transform: translate(-50%, 0);
+                width: 0%;
+                height: 0.3rem; 
+                background-color: $color-white;
+                transition: 0.3s all;
+                border-radius: 10%;
+            }
+
+            &:not(:last-child)
+            {
+                margin-right: 2.5rem; 
+            }
         }
     }
 
     &--loader {
         position: absolute;
         top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 160%; 
-        height: 150%;
+        left: 0;
+        transform: translate(0, -50%);
+        width: 60%; 
+        height: 100%;
         background-color: rgba(#2c2c2c, 0.9); 
         border-radius: 3px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-content: center;
+
+        @include respond(tab-port) {
+            width: 100%;
+            top: 0;
+            transform: unset;
+        }
 
         &--icon {
             width: 4rem;
@@ -133,7 +217,10 @@
             display: flex;
             flex-direction: row;
             justify-content: center;
-            padding: 0 5rem;
+            padding: 0 12rem 0 5rem;
+            @include respond(tab-port) {
+                padding: 0;
+            }
         }
 
         &--animated {
@@ -172,8 +259,26 @@
         font-family: 'Spartan', sans-serif;
         align-items: center;
         overflow: hidden;
-        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 5px 0 rgba(0, 0, 0, 0.06);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         
+        @include respond(tab-port) {
+            width: 70%;
+            height: unset;
+            padding: 4rem 2rem;
+            flex-direction: column;
+            justify-content: center;
+            background-image:linear-gradient(to right bottom, rgba($color-grey-3, 0.5), rgba($color-grey-3, 0.45)), linear-gradient(to left top, rgba(#6d327c, 0.4), rgba(#485DA6, 0.4), rgba(#00a1ba, 0.4), rgba(#00BF98, 0.4), rgba(#36C486, 0.4)), url("/akihabara.jpg");
+            background-position: center;
+            background-size: cover;
+            position: relative;
+            top: unset;
+            left: unset;
+            transform: unset;
+        }
+        @include respond(phone) {
+            width: 90%;
+        }
+
         &--main {
             display: flex;
             flex-direction: column;
@@ -181,7 +286,10 @@
             align-items: center;
             margin-left: 6rem;
             opacity: 1; 
-            position: relative;
+
+            @include respond(tab-port) {
+                margin-left: 0;
+            }
             
             &--header {
                 font-weight: 400; 
@@ -196,10 +304,13 @@
                 color: rgba(255, 255, 255, 0.6); 
                 margin-bottom: 2rem; 
                 user-select: none;
+
+                @include respond(tab-port) {
+                    color: rgba(255, 255, 255, 0.8); 
+                }
             }
     
             &--list {
-
                 &--animation {
                     &-enter {
                         animation: enterInputAnimation 0.1s 1 forwards;
@@ -213,6 +324,7 @@
                 &--item {
                     display: flex;
                     flex-direction: column;
+                    position: relative;
                      
                     &--label {
                         color: whitesmoke; 
@@ -224,25 +336,22 @@
 
                         &-error {
                             margin-bottom: 0;
-                            margin-top: 0.5rem; 
                             font-weight: 600;
                             font-size: 1.1rem; 
-                            color: #d80000;
+                            color: $color-error;
                             text-transform: none;
                             
                             &--container {
                                 display: flex;
                                 flex-direction: row;
                                 align-items: center;
-                                margin-top: 0.5rem;
+                                margin-top: 1.5rem;
                             }
 
                             &--icon {
-                                width: 1.75rem;
-                                height: 1.75rem;
-                                background-image: url("/Warning-Circle-Icon.png");
-                                background-size: cover;
+                                font-size: 1.75rem;
                                 margin-right: 1rem;
+                                color: $color-white;
                             }
                         }
                     }
@@ -258,8 +367,15 @@
                         border-radius: 2px;
                         width: 35rem;
                         transition: all .3s;
+                        outline: none;
+                        box-shadow: none !important;
     
                         &:focus:invalid {
+                            border: 1px solid #9b0000 !important;
+                            outline: none;
+                        }
+                        
+                        &-edited:invalid {
                             border: 1px solid #9b0000 !important;
                             outline: none;
                         }
@@ -270,7 +386,40 @@
      
                         &:focus {
                             border: 1px solid #008d5c; 
-                        } 
+                        }
+
+                        &-password {
+                            padding-right: 4rem;
+                        }
+
+                        &-show {
+                            position: absolute;
+                            right: 1rem;
+                            bottom: 1.25rem;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 4.5rem;
+                            z-index: 0;
+            
+                            &--button {
+                                cursor: pointer;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+
+                                .dropdown--hint {
+                                    background-color: $color-white;
+                                    color: $color-grey-3;
+                                }
+                            }
+            
+                            &--icon {
+                                max-width: 2rem;
+                                font-size: 1.8rem;
+                                color: $color-white;
+                            }
+                        }
                     }
     
                     &:not(:last-child) {
@@ -309,12 +458,14 @@
                 }
             }
 
-            &--alternative {
-                margin-top: 5rem; 
+            &--reset {
+                margin-top: 2rem;
+                margin-bottom: -4rem;
                 color: white;
                 font-weight: 600;
                 font-size: 1.2rem;
                 user-select: none;
+                font-family: $font-primary;
                 
                 &--link, &--link:visited { 
                     cursor: pointer;
@@ -329,6 +480,41 @@
 
                     &:hover {
                         color: #00f0dc;   
+                    }
+                }
+            }
+
+            &--alternative {
+                margin-top: 5rem; 
+                color: white;
+                font-weight: 600;
+                font-size: 1.2rem;
+                user-select: none;
+                font-family: $font-primary;
+                
+                &--link, &--link:visited { 
+                    cursor: pointer;
+                    color: #00c9b7;
+                    font-weight: 800;
+                    text-decoration: none;
+                    letter-spacing: 0.05rem;
+                    margin-left: 0.4rem;
+                    transition: all .2s; 
+                    display: inline-block; 
+                    user-select: none;
+
+                    @include respond(tab-port) {
+                        color: $color-white;
+                        border-bottom: 2px solid $color-white;
+                    }
+
+                    &:hover {
+                        color: #00f0dc;
+
+                        @include respond(tab-port) {
+                            color: #00c9b7;
+                            border-bottom: 2px solid #00c9b7;
+                        }
                     }
                 }
             }
@@ -353,12 +539,16 @@
             align-items: center;
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
             color: #3b3b3b;
+
+            @include respond(tab-port) {
+                display: none;
+            }
         }
 
         &--side {
             width: 50%;
             height: 100%;
-            background-image: linear-gradient(to left top, rgba(#6d327c, 1), rgba(#485DA6, 1), rgba(#00a1ba, 1), rgba(#00BF98, 1), rgba(#36C486, 1)), url("/"); // TODO: Add image url + change alpha to 0.4
+            background-image: linear-gradient(to left top, rgba(#6d327c, 0.4), rgba(#485DA6, 0.4), rgba(#00a1ba, 0.4), rgba(#00BF98, 0.4), rgba(#36C486, 0.4)), url("/akihabara.jpg");
             clip-path: polygon(15% 0, 100% 0, 100% 100%, 0 100%);
             background-size: cover;
             background-position: center;
@@ -366,7 +556,11 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding-left: 4rem; 
+            padding-left: 4rem;
+
+            @include respond(tab-port) {
+                display: none;
+            }
 
             &--actions {
                 &--item {
@@ -421,6 +615,34 @@
                         }
                     }                    
                 }
+            }
+        }
+
+        &--mobile_side {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+
+            @include respond(tab-port) {
+                display: flex;
+            }
+
+            &--or {
+                width: 5rem;
+                height: 5rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 2.1rem;
+                border-radius: 50%;
+                background-color: $color-white;
+                margin: 2rem 0;
+                font-weight: 600;
+                user-select: none;
+            }   
+            
+            &--items {
+
             }
         }
     }

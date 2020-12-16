@@ -1,0 +1,132 @@
+.btn {
+    background-color: $color-primary;
+    color: $color-white;
+    padding: .75rem 1.8rem; 
+    border-radius: 2.815rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    user-select: none;
+    cursor: pointer;
+    transition: all .3s;
+
+    
+    
+    &:hover {
+        background-color: darken($color-primary, $amount: 5%);
+    }
+
+    .dropdown--hint {
+        pointer-events: none;
+    }
+
+    &:hover .dropdown--hint {
+        pointer-events: all;
+        opacity: 1;
+        letter-spacing: unset;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    &:active {
+        transform: translateY(0.2rem) scale(0.98);
+        background-color: darken($color-primary, $amount: 10%);
+    }
+
+    &-secondary {
+        background-color: $color-secondary;
+        &:hover {
+            background-color: darken($color-secondary, $amount: 5%);
+        }
+        &:active {
+            background-color: darken($color-secondary, $amount: 10%);
+        }
+    }
+    
+    &-success {
+        background-color: $color-success;
+        &:hover {
+            background-color: darken($color-success, $amount: 5%);
+        }
+        &:active {
+            background-color: darken($color-success, $amount: 10%);
+        }
+    }
+    
+    &-warning {
+        background-color: $color-warning;
+        &:hover {
+            background-color: darken($color-warning, $amount: 5%);
+        }
+        &:active {
+            background-color: darken($color-warning, $amount: 10%);
+        }
+    }
+    
+    &-danger {
+        background-color: $color-error;
+        &:hover {
+            background-color: darken($color-error, $amount: 5%);
+        }
+        &:active {
+            background-color: darken($color-error, $amount: 10%);
+        }
+    }
+
+    &-disabled {
+        opacity: 0.6;
+        cursor: not-allowed !important;
+
+        &:hover {
+            letter-spacing: 0;
+        }
+    }
+
+    &-no_style {
+        background-color: unset;
+        color: unset;
+        padding: 0; 
+        border-radius: 0;
+        font-size: inherit;
+        font-weight: inherit;
+        user-select: inherit;
+        cursor: inherit;
+
+        &:hover {
+            background-color: unset;
+            letter-spacing: inherit;
+        }
+
+        &:active {
+            transform: none;
+            background-color: unset;
+        }
+
+        & &-secondary {
+            background-color: unset;
+            &:hover {
+                background-color: unset;
+                letter-spacing: unset;
+            }
+        }
+        
+        & &-success {
+            background-color: unset;
+            &:hover {
+                background-color: unset;
+            }
+        }
+        
+        & &-warning {
+            background-color: unset;
+            &:hover {
+                background-color: unset;
+            }
+        }
+        
+        & &-danger {
+            background-color: unset;
+            &:hover {
+                background-color: unset;
+            }
+        }
+    }
+}

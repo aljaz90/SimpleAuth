@@ -1,0 +1,28 @@
+.checkbox {
+    &--label {
+        width: 2rem;
+        height: 2rem;
+        border: 1px solid $color-grey;
+        cursor: pointer;
+        transition: all .2s cubic-bezier(0.61, 1, 0.88, 1);
+        border-radius: 2px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &-selected {
+            background-color: $color-info;
+            border: 1px solid transparent;
+        }
+        
+        &--icon {
+            font-size: 1.6rem;
+            color: $color-white;
+        }
+    }
+
+    &--input {
+        display: none;
+    }
+}

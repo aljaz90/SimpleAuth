@@ -1,17 +1,17 @@
-let middlewareObj   = {},
-    db              = require("../models");
+const middlewareObj   = {},
+      db              = require("../models");
 
-middlewareObj.isLoggedIn = async (req, res, next) => {
-    
+middlewareObj.isLoggedIn = async (req, res, next) => {    
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    //const userAgent = req.headers['user-agent'];
     const key = req.session.key;
     const session = req.session.session;
     const expiration = req.session.expiration;
-
+    
     if (key && session && expiration && new Date(expiration) > new Date()) {
         try {
-            let foundSession = await db.Session.findOne({key: key, ip: ip}).populate("user");
-            if (foundSession && foundSession._id.equals(session)) {
+            let foundSession = await db.Session.findOne({key: key}).populate("user");
+            if (foundSession && foundSession._id.equals(session) /*&& foundSession.ip === ip*/) {
                 req.user = foundSession.user;
 
                 let timeToExpiration = (new Date(expiration).getTime() - new Date().getTime()) / 1000;
@@ -23,7 +23,7 @@ middlewareObj.isLoggedIn = async (req, res, next) => {
                         req.session.expiration = savedSession.expire_at;                    
                     }
                     catch (err) {
-                        console.log("Unable to extend session");
+                        console.log("[ERROR] An error occured while extending the session");
                         console.log(err);
                     }
                 }
@@ -31,12 +31,22 @@ middlewareObj.isLoggedIn = async (req, res, next) => {
                 return next();
             }
             else {
-                console.log("Invalid session")
+                console.log("[ERROR] An error occured while trying to find the session");
+                
+                if (foundSession) {
+                    console.log("Session key and id do not match provided");
+                    console.log(`Expected key: ${foundSession.key}; Expected session id: ${foundSession._id}; Expected ip: ${foundSession.ip}`);
+                    console.log(`Given key: ${key}; Given session id: ${session}; Given ip: ${ip}`);
+                }
+                else {
+                    console.log("404: Session not found");
+                }
+
                 return res.status(401).json("Unauthorized");
             }
         }
         catch (err) {
-            console.log("Error:")
+            console.log("[ERROR] An error occured while trying to find the session")
             console.log(err);
             return res.status(401).json("Unauthorized");
         }

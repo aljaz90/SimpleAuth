@@ -1,15 +1,22 @@
-$color-primary: #32dbc6;
-$color-primary-dark: #49beb7;
-$color-primary-light: lighten(#32dbc6, 10%);
+$color-primary:  #028da8;
+$color-primary-dark:  darken($color-primary, 10%);
+$color-primary-dark-2:  darken($color-primary, 20%);
+$color-primary-light:  lighten($color-primary, 10%);
+$color-primary-light-2:  lighten($color-primary, 20%);
 
-$color-secondary: #ff502f;
-$color-secondary-dark: darken(#ff502f, 10%);
-$color-secondary-dark-2: darken(#ff502f, 20%);
-$color-secondary-light: lighten(#ff502f, 10%);
+$color-secondary: #8e44ad;
+$color-secondary-dark:  darken($color-secondary, 10%);
+$color-secondary-dark-2:  darken($color-secondary, 20%);
+$color-secondary-light:  lighten($color-secondary, 10%);
+$color-secondary-light-2:  lighten($color-secondary, 20%);
 
-$color-tertiary: #ebefd0;
-$color-tertiary-dark: darken(#ebefd0, 10%);
-$color-tertiary-light: lighten(#ebefd0, 10%);
+$color-success: #50BC2F;
+$color-info: #226AF9;
+$color-warning: #FFBF00;
+$color-error: #E02626;
+
+$color-tertiary: #96afb8;
+$color-tertiary-dark: #334a52;
 
 $color-white: #fff;
 $color-white-2: #f4f4f4;

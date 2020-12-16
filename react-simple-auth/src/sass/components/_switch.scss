@@ -1,0 +1,56 @@
+.switch {
+    display: flex;
+    flex-direction: row;
+    background-color: $color-white;
+    border: 2px solid $color-primary;
+    border-radius: 2.18rem;
+    overflow: hidden;
+    
+    &-nav {
+        display: flex;
+        flex-direction: row;
+        background-color: $color-white;
+        overflow: hidden;
+        border-bottom: 1px solid $color-grey-2;
+    }
+
+    &--option {
+        font-size: 1.3rem;
+        padding: .75rem 1rem;
+        transition: all .3s;
+        cursor: pointer;
+        user-select: none;
+        border-radius: 2.18rem;
+        color: $color-grey-3;
+        white-space: nowrap;
+        
+        &-nav {
+            font-size: 1.3rem;
+            padding: .75rem 1rem;
+            transition: all .3s;
+            cursor: pointer;
+            user-select: none;
+            color: $color-grey-3;
+            border-bottom: 4px solid transparent;
+
+            &-selected {
+                color: $color-primary;
+                border-bottom: 4px solid $color-primary;
+                font-weight: 500;
+            }
+        }
+
+        &-selected {
+            color: $color-white;
+            background-color: $color-primary;
+            font-weight: 500;
+            padding: .75rem 1.5rem;
+            margin-left: -0.5rem;
+            margin-right: -0.5rem;
+        }
+
+        &--icon {
+            margin-right: 1rem;
+        }
+    }
+}

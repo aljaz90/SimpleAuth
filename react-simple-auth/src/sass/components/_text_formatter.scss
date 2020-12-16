@@ -1,0 +1,76 @@
+.text_formatter {
+    
+    &--table {
+        border-collapse:separate;
+        border-spacing: 0.4rem;
+
+        &--row {
+            &--data {
+                padding: 0.4rem 1.5rem;
+                border-left: 3px solid $color-grey;
+                border-right: 3px solid $color-grey;
+                white-space: nowrap;
+
+                &:last-child {
+                    border-right: none;
+                }
+
+                &:first-of-type {
+                    border-left: none;
+                }
+
+                &-no_border {
+                    border-right: none !important;
+                    border-left: none !important;
+                }
+
+                &-header {
+                    &-top {
+                        font-weight: 500;
+                        font-size: 1.5rem;
+                        border-bottom: 3px solid $color-primary-light;
+                        border-right: none !important;
+                        border-left: none !important;
+                    }
+                    &-left {
+                        font-weight: 500;
+                        font-size: 1.5rem;
+                        border-right: 3px solid $color-primary-light !important;
+                        border-left: none;
+                        padding-right: 2rem !important;
+                        text-align: left;
+                    }
+                }
+            }
+        }
+    }
+
+    &--ol, &--ul {
+        display: flex;
+        flex-direction: column;
+
+        &--row {
+            margin-bottom: 0.4rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+
+            &--number {
+                font-weight: 500;
+                font-size: 1.5rem;
+                border-right: 3px solid $color-primary-light;
+                margin-right: 2rem;
+                padding-right: 1rem;
+            }
+            
+            &--circle {
+                margin-right: 2rem;
+                height: 3px;
+                width: 1rem;
+                background-color: $color-primary-light;
+                display: inline-block;
+            }
+        }
+
+    }
+}

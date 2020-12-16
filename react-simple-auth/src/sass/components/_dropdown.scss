@@ -1,0 +1,246 @@
+.dropdown {
+    position: relative;
+    
+    &--button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: $color-grey-2;
+        border: 1px solid $color-grey;
+        padding: 1rem 1rem 1rem 2rem;
+        border-radius: 4px;
+        cursor: pointer;
+        user-select: none;
+        transition: all .3s;
+        min-width: 17rem;
+        z-index: 21;
+        
+        &:hover {
+            background-color: $color-white-2; 
+        }
+
+        &-primary, &-secondary, &-info, &-success, &-error, &-warning {
+            color: $color-white;
+        }
+
+        &-primary {
+            background-color: $color-primary;
+            &:hover {
+                background-color: $color-primary-dark;
+            }
+        }
+
+        &-secondary {
+            background-color: $color-secondary;
+            &:hover {
+                background-color: $color-secondary-dark;
+            }
+        }
+
+        &-info {
+            background-color: $color-info;
+            &:hover {
+                background-color: darken($color-info, $amount: 5%);
+            }
+        }
+        
+        &-success {
+            background-color: $color-success;
+            &:hover {
+                background-color: darken($color-success, $amount: 5%);
+            }
+        }
+        
+        &-warning {
+            background-color: $color-warning;
+            &:hover {
+                background-color: darken($color-warning, $amount: 5%);
+            }
+        }
+        
+        &-danger {
+            background-color: $color-error;
+            &:hover {
+                background-color: darken($color-error, $amount: 5%);
+            }
+        }
+
+        &--icon {
+            margin-left: 1rem;
+            font-size: 1.6rem;
+        }
+    }
+
+    &--button:hover + &--hint {
+        opacity: 1;
+    }
+
+    &--hint {
+        position: absolute;        
+        user-select: none;
+        color: $color-white;
+        background-color: $color-grey-3;
+        opacity: 0;
+        font-size: 1.2rem;
+        font-weight: 500;
+        border-radius: 4px;        
+        white-space: nowrap;
+        padding: 0.5rem 1rem;
+        z-index: 19;
+        transition: all .2s;
+
+        &-left {
+            top: 50%;
+            left: 0;
+            transform: translate(calc(-100% - 1rem), -50%);
+        }
+        &-right {
+            top: 50%;
+            right: 0;
+            transform: translate(calc(100% + 1rem), -50%);
+            
+        }
+        &-top {
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, calc(-100% - 1rem));            
+        }
+        &-bottom {
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, calc(100% + 1rem));
+        }
+    }
+
+    &--options {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translate(-50%, calc(100% + 1rem));
+        flex-direction: column;
+        display: flex;
+        min-width: 25rem;
+        border: 1px solid $color-grey;
+        border-radius: 2px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        z-index: 20;
+        background-color: $color-white;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        max-height: 22rem;
+
+        &--search {
+            position: relative;
+            border-bottom: 2px solid $color-grey-2;
+
+            &--input {
+                position: relative;
+                z-index: 1;
+                border: 0;
+                color: $color-grey-3;
+                font-size: 1.6rem;
+                font-size: 600;
+                padding: 1rem 1.75rem 1rem 4rem; 
+                transition: all .3s;
+                overflow-x: hidden;
+            }
+
+            &--icon {
+                color: $color-grey-3;
+                position: absolute;
+                left: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 2;
+                font-size: 1.6rem;
+            }
+
+            &-secondary {
+                color: $color-secondary;
+            }
+            
+            &-success {
+                color: $color-success;
+            }
+            
+            &-warning {
+                color: $color-warning;
+            }
+            
+            &-danger {
+                color: $color-error; 
+            }  
+        }
+
+        &-top {
+            bottom: unset;
+            top: 0;
+            transform: translate(-50%, calc(-100% - 1rem));
+        }
+        
+        &-right {
+            bottom: 50%;
+            right: 0;
+            left: unset;
+            transform: translate(calc(100% + 1rem), 50%);
+        }
+        
+        &-left {
+            bottom: 50%;
+            left: 0;
+            right: unset;
+            transform: translate(calc(-100% - 1rem), 50%); 
+        }
+
+        &--item {
+            color: $color-grey-3;
+            user-select: none;
+            font-size: 1.6rem;
+            padding: 0.5rem 1.75rem; 
+            transition: all .3s;
+            cursor: pointer;
+            text-overflow: ellipsis;
+            text-transform: capitalize;
+            white-space: nowrap;
+
+            &:not(:last-child) {
+                border-bottom: 1px solid $color-grey;
+            }
+
+            &--icon {
+                margin-right: 1rem;
+            }
+
+            &:hover {
+                background-color: $color-white-2;
+            }
+
+            &-secondary {
+                &:hover {
+                    background-color: $color-secondary;
+                }
+            }
+            
+            &-success {
+                &:hover {
+                    background-color: $color-success;
+                }
+            }
+            
+            &-warning {
+                &:hover {
+                    background-color: $color-warning;
+                }
+            }
+            
+            &-danger {
+                &:hover {
+                    background-color: $color-error; 
+                }
+            }            
+        }
+    }
+}

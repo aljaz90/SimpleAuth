@@ -1,5 +1,5 @@
-const mongoose  = require("mongoose");
-const config    = require("../config/config");
+const mongoose  = require("mongoose"),
+      CONFIG    = require("../config/config");
 
 Date.prototype.addHours = function(hours) {
     this.setHours(this.getHours() + hours);
@@ -9,11 +9,15 @@ Date.prototype.addHours = function(hours) {
 const sessionSchema = new mongoose.Schema({
     key: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     ip: {
         type: String,
         required: true
+    },
+    user_agent: {
+        type: String
     },
     user: { 
         type: mongoose.Schema.ObjectId, 
@@ -26,12 +30,12 @@ const sessionSchema = new mongoose.Schema({
     },
     expire_at: { 
         type: Date, 
-        default: new Date().addHours(config.sessionLengthInHours) 
+        default: new Date().addHours(CONFIG.SESSION.LENGTH) 
     },
     updated_at: { 
         type: Date, 
         default: Date.now,
-        expires: 86400
+        expires: CONFIG.SESSION.LENGTH*60*60
     }
 });
 

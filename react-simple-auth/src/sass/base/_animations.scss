@@ -1,0 +1,151 @@
+.animation {
+    &--dropdown {
+        &--bottom {
+            @keyframes showDropdownBottom {
+                0% { opacity: 0; transform: translate(-50%, calc(100% - 0rem)); }
+                100% { opacity: 1; transform: translate(-50%, calc(100% + 1rem)); }
+            }
+            @keyframes hideDropdownBottom {
+                0% { opacity: 1; transform: translate(-50%, calc(100% + 1rem)); }
+                100% { opacity: 0; transform: translate(-50%, calc(100% - 0rem)); }
+            }
+
+            &-enter {
+                animation: showDropdownBottom 0.1s linear 1;
+            }
+            
+            &-leave {
+                animation: hideDropdownBottom 0.1s linear 1;
+            }
+        }
+        
+        &--top {
+            @keyframes showDropdownTop {
+                0% { opacity: 0; transform: translate(-50%, calc(-100% - 0rem)); }
+                100% { opacity: 1; transform: translate(-50%, calc(-100% - 1rem)); }
+            }
+            @keyframes hideDropdownTop {
+                0% { opacity: 1; transform: translate(-50%, calc(-100% - 1rem)); }
+                100% { opacity: 0; transform: translate(-50%, calc(-100% - 0rem)); }
+            }
+
+            &-enter {
+                animation: showDropdownTop 0.1s linear 1;
+            }
+            
+            &-leave {
+                animation: hideDropdownTop 0.1s linear 1;
+            }
+        }
+        
+        &--right {
+            @keyframes showDropdownRight {
+                0% { opacity: 0; transform: translate(calc(100% + 0rem), 50%); }
+                100% { opacity: 1; transform: translate(calc(100% + 1rem), 50%); }
+            }
+            @keyframes hideDropdownRight {
+                0% { opacity: 1; transform: translate(calc(100% + 1rem), 50%); }
+                100% { opacity: 0; transform: translate(calc(100% + 0rem), 50%); }
+            }
+
+            &-enter {
+                animation: showDropdownRight 0.1s linear 1;
+            }
+            
+            &-leave {
+                animation: hideDropdownRight 0.1s linear 1;
+            }
+        }
+
+        &--left {
+            @keyframes showDropdownLeft {
+                0% { opacity: 0; transform: translate(calc(-100% - 0rem), 50%); }
+                100% { opacity: 1; transform: translate(calc(-100% - 1rem), 50%); }
+            }
+            @keyframes hideDropdownLeft {
+                0% { opacity: 1; transform: translate(calc(-100% - 1rem), 50%); }
+                100% { opacity: 0; transform: translate(calc(-100% - 0rem), 50%); }
+            }
+
+            &-enter {
+                animation: showDropdownLeft 0.1s linear 1; 
+            }
+            
+            &-leave {
+                animation: hideDropdownLeft 0.1s linear 1;
+            }
+        }
+    }
+
+    &--fadeInOut {
+        @keyframes fadeIn {
+            0% {opacity: 0;}
+            100% {opacity: 1;}
+        }
+        @keyframes fadeOut {
+            0% {opacity: 1;}
+            100% {opacity: 0;} 
+        }
+
+        &-enter {
+            animation: fadeIn 0.3s cubic-bezier(0.61, 1, 0.88, 1) 1;
+        }
+        
+        &-leave {
+            animation: fadeOut 0.2s cubic-bezier(0.61, 1, 0.88, 1) 1;
+        }
+    }
+    
+    &--sidebar--mobile {
+        @keyframes showSidebarMyCourses {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+          
+        @keyframes hideSidebarMyCourses {
+            0% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            60% {
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+        } 
+
+        &-enter {
+            transform: translateX(-100%);
+            animation-duration: 0.3s;
+            animation-fill-mode: both;
+            animation-timing-function: cubic-bezier(0.61, 1, 0.88, 1);
+            animation-play-state: paused;
+
+            &-active {
+                animation-name: showSidebarMyCourses; 
+                animation-play-state: running;
+            }
+        }
+                    
+        &-leave {
+            animation-duration: 0.3s;
+            animation-fill-mode: both;
+            animation-timing-function: cubic-bezier(0.61, 1, 0.88, 1);
+            animation-play-state: paused;
+
+            &-active {
+                animation-name: hideSidebarMyCourses;
+                animation-play-state: running;
+            }
+        } 
+    }
+}
+ 

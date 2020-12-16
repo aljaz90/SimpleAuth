@@ -1,0 +1,97 @@
+.sidebar {
+    grid-column: sidebar-start / sidebar-end;
+    grid-row: 1 / -1;
+    background-color: $color-primary;
+    color: $color-white;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    z-index: 4;
+
+    @include respond(tab-land) {
+        display: none;
+    }
+
+    &--header {
+        margin-bottom: 12rem ; 
+        font-size: 1.5rem;
+        position: relative;
+
+        &--icon {
+            background-image: url("/logo-white-small.png");
+            width: 4rem;
+            height: 4rem;
+            background-size: cover;
+            background-position: center;
+        }
+    }
+
+    &--item {
+        font-size: 1.5rem;
+        position: relative;
+        width: 100%;
+        text-align: center;
+
+        &-disabled { 
+            opacity: 0.45;
+        }
+
+        &:link, &:visited {
+            outline: none;
+        }
+
+        &:active {
+            outline: none;
+        }
+
+        &--icon {
+            font-size: 3.5rem;
+            color: rgba($color-white, 0.4);
+            transition: all .2s cubic-bezier(0.55, 0, 0.55, 0.2);
+            cursor: pointer;
+            z-index: 6; 
+            position: relative;
+            outline: none;
+            width: 100%;
+            display: block;
+            padding: 1rem 0;
+            
+            &-selected {  
+                color: $color-white;
+            }
+        }
+
+        &--background {
+            z-index: 5;
+            width: 100%;
+            height: 100%;
+            background-color: $color-primary;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        &--icon:hover + &--label {
+            opacity: 1;
+            transform: translate(9rem, -50%);
+        }
+
+        &--label {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translate(0, -50%);
+            background-color: $color-grey-3; 
+            padding: 0.5rem 0.75rem;
+            opacity: 0;  
+            transition: all .3s;
+            border-radius: 4px;
+            z-index: 4;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+    }
+}
