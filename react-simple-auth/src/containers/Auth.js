@@ -368,8 +368,8 @@ export default class Auth extends Component {
         try {
             let res = await axios.post("http://localhost:4000/api/user", requestBody, config);
             this.setState({...this.state, inputData: this.getInitialInputData(), loading: false, animations: {...this.state.animations, loader: "auth--loader--animated-hide"}});
-            this.props.saveUserData(true, res.data.userData);
-            setCookie("session", res.data.userData.user._id, 1);
+            this.props.saveUserData(true, res.data);
+            setCookie("session", res.data.user._id, 1);
         } 
         catch (err) {
             console.error("An error occured while trying to sign in");
@@ -399,15 +399,15 @@ export default class Auth extends Component {
         try {
             let res = await axios.post("http://localhost:4000/api/user/new", requestBody, config);
             this.setState({...this.state, inputData: this.getInitialInputData(), loading: false, animations: {...this.state.animations, loader: "auth--loader--animated-hide"}});
-            this.props.saveUserData(true, res.data.userData);
-            setCookie("session", res.data.userData.user._id, 1);
+            this.props.saveUserData(true, res.data);
+            setCookie("session", res.data.user._id, 1);
         } 
         catch (err) {
             console.error("An error occured while trying to sign up");
             console.log(err);
 
             let error = "Server Error";
-            if (err.response.data.name === "UserExistsError") {
+            if (err.response && err.response.data.name === "UserExistsError") {
                 error = "Email already used";
             }
 
