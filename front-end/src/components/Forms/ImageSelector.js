@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import EzAnimate from '../Animations/EzAnimate';
-import { Button } from '../Forms/Button';
-import { Switch } from '../Forms/Switch';
+import { Button } from './Button';
+import { Switch } from './Switch';
 import { IonIcon } from '../IonIcons/IonIcon';
 
 export const ImageSelector = props => {

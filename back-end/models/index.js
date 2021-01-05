@@ -18,3 +18,4 @@ mongoose.set('useCreateIndex', true);
 module.exports.Session = require("./session");
 module.exports.User = require("./user");
 module.exports.Upload = require("./upload");
+module.exports.PasswordResetLink = require("./password_reset_link");
