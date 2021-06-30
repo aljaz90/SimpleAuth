@@ -24,4 +24,4 @@
 
 ## LICENCE
 
-*Mozilla Public License 2.0
+Mozilla Public License 2.0
