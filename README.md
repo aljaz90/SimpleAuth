@@ -16,11 +16,11 @@
 
 ### Signin / Signup form
 
-![alt text](https://raw.githubusercontent.com/aljaz90/Simple-Auth-Template/master/login.png)
+![alt text](https://raw.githubusercontent.com/aljaz90/Simple-Auth/master/login.png)
 
 ### Reset password form
 
-![alt text](https://raw.githubusercontent.com/aljaz90/Simple-Auth-Template/master/reset_password.png)
+![alt text](https://raw.githubusercontent.com/aljaz90/Simple-Auth/master/reset_password.png)
 
 ## LICENCE
 
