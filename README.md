@@ -1,6 +1,6 @@
 # Simple Auth
 
-**Simple Auth is a project template that has authentication prebuilt.**
+**Simple Auth is a project template with premade authentication.**
 
 ## Requirements
 
